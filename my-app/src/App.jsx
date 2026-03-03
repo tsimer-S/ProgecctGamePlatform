@@ -1,34 +1,30 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Catalog from './pages/Catalog';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './pages/Home'
+import Catalog from './pages/Catalog'
+import GameDetails from './pages/GameDetails'
+import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-100">
-        {/* Простая шапка */}
-        <header className="bg-blue-600 text-white p-4">
-          <h1 className="text-2xl font-bold">Game Platform</h1>
-          <nav className="mt-2">
-            <a href="/" className="mr-4 hover:underline">Главная</a>
-            <a href="/catalog" className="hover:underline">Каталог</a>
-          </nav>
-        </header>
-
-        <main className="container mx-auto p-6">
+    <BrowserRouter>
+      <div className="flex min-h-screen flex-col bg-[var(--dark-bg)]">
+        <Header />
+        
+        <main className="flex-grow container mx-auto px-4 py-8 md:py-12">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/catalog" element={<Catalog />} />
-            {/* Добавь позже: <Route path="/game/:id" element={<GameDetails />} /> */}
+            <Route path="/game/:id" element={<GameDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </main>
 
-        <footer className="bg-gray-800 text-white text-center p-4 mt-auto">
-          © 2026 Game Platform
-        </footer>
+        <Footer />
       </div>
-    </Router>
-  );
+    </BrowserRouter>
+  )
 }
-
-export default App;

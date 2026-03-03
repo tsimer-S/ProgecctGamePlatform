@@ -1,68 +1,61 @@
+@import "tailwindcss";
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  --neon-cyan: #00f0ff;
+  --neon-purple: #ff00ea;
+  --neon-pink: #ff2e63;
+  --dark-bg: #0a0a15;
+  --card-bg: rgba(20, 20, 40, 0.65);
+  --border-glow: rgba(0, 240, 255, 0.35);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  background: linear-gradient(135deg, #0a0a15 0%, #1a0033 100%);
+  color: #e0e0ff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.neon-glow {
+  box-shadow: 
+    0 0 8px var(--border-glow),
+    0 0 20px rgba(0, 240, 255, 0.25),
+    inset 0 0 6px rgba(0, 240, 255, 0.15);
+  transition: all 0.4s ease;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.neon-glow:hover {
+  box-shadow: 
+    0 0 15px var(--border-glow),
+    0 0 40px rgba(0, 240, 255, 0.45),
+    inset 0 0 12px rgba(0, 240, 255, 0.3);
+  transform: translateY(-6px) scale(1.02);
+}
+
+@keyframes appearFromBottom {
+  from { opacity: 0; transform: translateY(60px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-appear {
+  animation: appearFromBottom 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.btn-neon {
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.btn-neon:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
+  filter: brightness(1.15);
 }
