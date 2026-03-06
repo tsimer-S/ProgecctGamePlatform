@@ -13,18 +13,18 @@ export default function Header() {
           Game Platform
         </Link>
 
-        <nav className="flex items-center gap-6 md:gap-8">
-          <Link to="/" className="hover:text-[var(--neon-cyan)] transition-colors">Главная</Link>
-          <Link to="/catalog" className="hover:text-[var(--neon-cyan)] transition-colors">Каталог</Link>
-          <Link to="/cart" className="relative flex items-center gap-2 hover:text-[var(--neon-cyan)] transition-colors">
-            <FaShoppingCart className="text-xl" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[var(--neon-purple)] text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
-                {totalItems}
-              </span>
-            )}
-          </Link>
-        </nav>
+       <nav className="flex items-center gap-6 md:gap-8">
+  <Link to="/" className="hover:text-[var(--neon-cyan)] transition-colors">Главная</Link>
+  <Link to="/catalog" className="hover:text-[var(--neon-cyan)] transition-colors">Каталог</Link>
+  <Link to="/news" className="hover:text-[var(--neon-cyan)] transition-colors">Новости</Link>
+  <Link to="/promotions" className="hover:text-[var(--neon-cyan)] transition-colors">Акции</Link>
+  <Link to="/profile" className="hover:text-[var(--neon-cyan)] transition-colors">Профиль</Link>
+  <Link to="/login" className="hover:text-[var(--neon-cyan)] transition-colors">Войти</Link>
+  {/* Корзина остаётся */}
+  <Link to="/cart" className="relative flex items-center gap-2 hover:text-[var(--neon-cyan)] transition-colors">
+    {/* ... корзина ... */}
+  </Link>
+</nav>
       </div>
     </header>
   )
