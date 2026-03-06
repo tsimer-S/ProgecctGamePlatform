@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import GameCard from '../components/GameCard'
 
 // Массив из 100 игр
+// загрузил фотки
 const fakeGames = [
   { id: 1, name: "Cyberpunk 2077", price: 59.99, image: "https://www.nintendo.com/eu/media/images/assets/nintendo_switch_2_games/cyberpunk2077ultimateedition/2x1_NSwitch2_Cyberpunk2077UE_image1600w.jpg", genre: "Action RPG" },
   { id: 2, name: "Elden Ring", price: 59.99, image: "https://image.api.playstation.com/vulcan/ap/rnd/202501/2901/c200be5371265efb80a1bae120ad3a0f2a3232c6006c0464.jpg", genre: "Action RPG" },
@@ -11,8 +12,8 @@ const fakeGames = [
   { id: 5, name: "Red Dead Redemption 2", price: 59.99, image: "https://gaming-cdn.com/images/products/5679/orig/red-dead-redemption-2-pc-game-rockstar-cover.jpg?v=1713793245", genre: "Open World" },
   { id: 6, name: "GTA V", price: 29.99, image: "https://roadtovrlive-5ea0.kxcdn.com/wp-content/uploads/2014/11/gtav-featured.jpg", genre: "Action-Adventure" },
   { id: 7, name: "Hollow Knight", price: 14.99, image: "https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch/70010000003208/4643fb058642335c523910f3a7910575f56372f612f7c0c9a497aaae978d3e51", genre: "Metroidvania" },
-  { id: 8, name: "Stardew Valley", price: 14.99, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/413150/capsule_616x353.jpg?t=1754692865", genre: "Simulation" },
-  { id: 9, name: "Among Us", price: 4.99, image: "https://assets.nintendo.com/image/upload/q_auto:best/f_auto/dpr_2.0/store/software/switch/70010000036098/758ab0b61205081da2466386940752c70e0e5ea43bd39e8b9b13eaa455c69b7e", genre: "Social Deduction" },
+  { id: 8, name: "Stardew Valley", price: 17.99, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/413150/capsule_616x353.jpg?t=1754692865", genre: "Simulation" },
+  { id: 9, name: "Among Us", price: 5.99, image: "https://assets.nintendo.com/image/upload/q_auto:best/f_auto/dpr_2.0/store/software/switch/70010000036098/758ab0b61205081da2466386940752c70e0e5ea43bd39e8b9b13eaa455c69b7e", genre: "Social Deduction" },
   { id: 10, name: "Valorant", price: 0, image: "https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg", genre: "FPS" },
   { id: 11, name: "Fortnite", price: 0, image: "https://i.ytimg.com/vi/adGdyCdvKz4/maxresdefault.jpg", genre: "Battle Royale" },
   { id: 12, name: "Minecraft", price: 29.99, image: "https://gaming-cdn.com/images/products/442/orig/minecraft-java-and-bedrock-edition-pc-mac-cover.jpg?v=1769503807", genre: "Sandbox" },
