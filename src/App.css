@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Твои кастомные стили и анимации (неон, keyframes) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Пример неонового glow (можно расширять) */
+.neon-glow {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4),
+              0 0 35px rgba(0, 255, 255, 0.2),
+              inset 0 0 10px rgba(0, 255, 255, 0.15);
+}
+
+body {
+  background: linear-gradient(to bottom right, #0f0f1a, #1e1b4b);
+}
