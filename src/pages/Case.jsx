@@ -1,75 +1,75 @@
 // src/pages/Case.jsx
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 export default function Case() {
   const [result, setResult] = useState(null)
   const [isOpening, setIsOpening] = useState(false)
-  const [canOpen, setCanOpen] = useState(false)
-  const [message, setMessage] = useState('')
 
   // Массив скидок
   const discounts = [1, 3, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
-  const longTape = [...discounts, ...discounts, ...discounts, ...discounts, ...discounts] // длинная лента для прокрутки
-
+  
+  // Создаем ленту с повторениями для плавной прокрутки
+  const repetitions = 7
+  const longTape = Array(repetitions).fill(discounts).flat()
+  
   const tapeRef = useRef(null)
-
-  // Проверяем, можно ли открыть кейс (только по таймеру 7 дней)
-  useEffect(() => {
-    const lastCaseOpen = localStorage.getItem('lastCaseOpen')
-
-    if (!lastCaseOpen) {
-      // Никогда не открывался → можно сразу
-      setCanOpen(true)
-      setMessage('Кейс готов! Откройте его прямо сейчас.')
-    } else {
-      const daysPassed = (new Date() - new Date(lastCaseOpen)) / (1000 * 60 * 60 * 24)
-      if (daysPassed >= 7) {
-        setCanOpen(true)
-        setMessage('Кейс снова доступен! Откройте его.')
-      } else {
-        const daysLeft = Math.ceil(7 - daysPassed)
-        setCanOpen(false)
-        setMessage(`Следующий кейс будет доступен через ${daysLeft} ${daysLeft === 1 ? 'день' : 'дней'}.`)
-      }
-    }
-  }, [])
+  const itemHeight = 80
+  const visibleItems = 5
 
   const openCase = () => {
-    if (!canOpen || isOpening) return
+    if (isOpening) return
 
     setIsOpening(true)
     setResult(null)
 
-    // Выбираем победителя заранее
-    const winnerIndex = Math.floor(Math.random() * discounts.length)
-    const winningDiscount = discounts[winnerIndex]
+    // Выбираем случайный индекс в оригинальном массиве скидок
+    const winnerOriginalIndex = Math.floor(Math.random() * discounts.length)
+    const winningDiscount = discounts[winnerOriginalIndex]
+    
+    // Находим все позиции этого значения в длинной ленте
+    const allPositions = []
+    longTape.forEach((value, index) => {
+      if (value === winningDiscount) {
+        allPositions.push(index)
+      }
+    })
+    
+    // Выбираем случайную позицию из середины ленты
+    const middleIndex = Math.floor(allPositions.length / 2)
+    const winnerIndex = allPositions[middleIndex]
+    
+    // Рассчитываем целевую позицию, чтобы победитель оказался под стрелкой
+    const targetPosition = winnerIndex - Math.floor(visibleItems / 2)
+    
+    // Минимальная и максимальная прокрутка
+    const maxScroll = (longTape.length - visibleItems) * itemHeight
+    let scrollTo = targetPosition * itemHeight
+    
+    if (scrollTo < 0) scrollTo = 0
+    if (scrollTo > maxScroll) scrollTo = maxScroll
 
-    // Позиция в ленте (чтобы выиграш остановился в центре)
-    const visibleItems = 5
-    const finalPosition = longTape.length - visibleItems - winnerIndex - Math.floor(Math.random() * 10) - 5
-
-    // Запуск анимации
     if (tapeRef.current) {
       tapeRef.current.style.transition = 'none'
       tapeRef.current.style.transform = 'translateY(0px)'
-
+      
       setTimeout(() => {
         tapeRef.current.style.transition = 'transform 6s cubic-bezier(0.25, 0.1, 0.25, 1)'
-        tapeRef.current.style.transform = `translateY(-${finalPosition * 80}px)`
+        tapeRef.current.style.transform = `translateY(-${scrollTo}px)`
 
-        // Показываем результат после анимации
         setTimeout(() => {
           setResult(winningDiscount)
           setIsOpening(false)
-          setCanOpen(false)
-
-          localStorage.setItem('lastCaseOpen', new Date().toISOString())
+          
+          // Сохраняем активную скидку
           localStorage.setItem('activeDiscount', winningDiscount)
-
-          alert(`Поздравляем! Вы выиграли скидку ${winningDiscount}%!`)
-        }, 6200) // 6 секунд + запас
-      }, 100)
+        }, 6000)
+      }, 50)
     }
+  }
+
+  const openNewCase = () => {
+    setResult(null)
+    openCase()
   }
 
   return (
@@ -79,22 +79,32 @@ export default function Case() {
       </h1>
 
       <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
-        Открывайте кейс каждые 7 дней и получайте случайную скидку до 100%!
+        Открывайте кейс сколько угодно раз и получайте случайную скидку до 100%!
       </p>
 
       <div className="max-w-lg mx-auto bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border-4 border-yellow-600/50 neon-glow overflow-hidden">
         {result ? (
-          <div className="space-y-8 animate-bounce-once">
-            <div className="text-8xl font-black text-yellow-400 drop-shadow-2xl">
+          <div className="space-y-8">
+            <div className="text-8xl font-black text-yellow-400 drop-shadow-2xl animate-bounce">
               {result}%
             </div>
             <p className="text-3xl text-white">Выиграно!</p>
-            <button
-              onClick={() => window.location.href = '/catalog'}
-              className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold text-xl rounded-xl hover:brightness-110 hover:scale-105 transition-all"
-            >
-              Применить скидку в каталоге
-            </button>
+            
+            <div className="space-y-4">
+              <button
+                onClick={() => window.location.href = '/catalog'}
+                className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold text-xl rounded-xl hover:brightness-110 hover:scale-105 transition-all"
+              >
+                Применить скидку в каталоге
+              </button>
+              
+              <button
+                onClick={openNewCase}
+                className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg rounded-xl hover:brightness-110 hover:scale-105 transition-all"
+              >
+                Открыть еще раз
+              </button>
+            </div>
           </div>
         ) : (
           <>
@@ -119,15 +129,18 @@ export default function Case() {
 
               <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-black to-transparent pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black to-transparent pointer-events-none" />
-              <div className="absolute top-1/2 left-0 w-full h-20 border-t-4 border-b-4 border-yellow-400 pointer-events-none transform -translate-y-1/2" />
+              
+              <div className="absolute top-1/2 left-0 w-full h-20 border-t-4 border-b-4 border-yellow-400 pointer-events-none transform -translate-y-1/2">
+                <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-yellow-400 rotate-45"></div>
+              </div>
             </div>
 
             <button
               onClick={openCase}
-              disabled={!canOpen || isOpening}
+              disabled={isOpening}
               className={`
                 w-full py-6 text-3xl font-bold rounded-2xl transition-all duration-500
-                ${!canOpen || isOpening
+                ${isOpening
                   ? 'bg-gray-700 cursor-not-allowed opacity-60'
                   : 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,200,0,0.7)]'
                 }
@@ -135,14 +148,12 @@ export default function Case() {
             >
               {isOpening ? 'Прокрутка...' : 'Открыть кейс'}
             </button>
-
-            {message && <p className="mt-6 text-lg text-yellow-300 font-medium">{message}</p>}
           </>
         )}
       </div>
 
       <p className="mt-12 text-gray-500 text-sm">
-        Новый кейс доступен каждые 7 дней
+        Открывайте кейс сколько угодно раз!
       </p>
     </div>
   )

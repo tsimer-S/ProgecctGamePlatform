@@ -1,3 +1,4 @@
+// src/components/GameCard.jsx
 import { Link } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
 
@@ -13,12 +14,12 @@ function GameCard({ game }) {
     <div className="bg-gray-900 p-4 rounded-xl neon-glow animate-appear">
       <img
         src={game.image}
-        alt={game.title}
+        alt={game.name || game.title} // Поддержка обоих вариантов
         className="w-full h-40 object-cover rounded-lg mb-3"
       />
 
       <h3 className="text-lg font-bold text-cyan-400">
-        {game.title}
+        {game.name || game.title} {/* Используем name или title */}
       </h3>
 
       <p className="text-gray-400 text-sm">

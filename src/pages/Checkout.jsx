@@ -1,63 +1,72 @@
-import { loadStripe } from '@stripe/stripe-js'
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { useState } from "react";
 
-// Замени на свой публичный ключ из Stripe Dashboard
-const stripePromise = loadStripe('pk_test_твой_ключ_здесь')
+function Checkout() {
+  const [cardNumber, setCardNumber] = useState("");
+  const [date, setDate] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [name, setName] = useState("");
 
-function CheckoutForm() {
-  const stripe = useStripe()
-  const elements = useElements()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-    })
-
-    if (error) {
-      console.error(error)
-    } else {
-      console.log('PaymentMethod:', paymentMethod)
-      // Здесь отправь token на бэкенд
-    }
-  }
+    alert("Оплата успешно выполнена!");
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-8 bg-gray-900/70 rounded-2xl border border-cyan-900/40 neon-glow">
-      <h2 className="text-3xl font-bold text-center mb-8 text-[var(--neon-cyan)]">Оформление платежа</h2>
-      
-      <div className="p-4 mb-6 bg-gray-800/50 rounded-lg border border-cyan-800/50">
-        <CardElement options={{
-          style: {
-            base: { fontSize: '18px', color: '#e0e0ff', '::placeholder': { color: '#aab7c4' } },
-            invalid: { color: '#ff6b6b' },
-          }
-        }} />
-      </div>
-
-      <button 
-        type="submit" 
-        disabled={!stripe}
-        className="w-full btn-neon py-4 text-xl rounded-xl disabled:opacity-50"
+    <div className="p-8 flex justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-900 neon-glow p-8 rounded-xl w-full max-w-md space-y-4"
       >
-        Оплатить
-      </button>
-    </form>
-  )
+        <h1 className="text-3xl text-cyan-400 neon-glow mb-4">
+          Оплата
+        </h1>
+
+        {/* Имя владельца */}
+        <input
+          type="text"
+          placeholder="Имя владельца карты"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-3 rounded bg-black text-white border border-cyan-400"
+        />
+
+        {/* Номер карты */}
+        <input
+          type="text"
+          placeholder="Номер карты"
+          value={cardNumber}
+          onChange={(e) => setCardNumber(e.target.value)}
+          className="w-full p-3 rounded bg-black text-white border border-cyan-400"
+        />
+
+        {/* Дата */}
+        <input
+          type="text"
+          placeholder="Дата (MM/YY)"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="w-full p-3 rounded bg-black text-white border border-cyan-400"
+        />
+
+        {/* CVV */}
+        <input
+          type="password"
+          placeholder="CVV код"
+          value={cvv}
+          onChange={(e) => setCvv(e.target.value)}
+          className="w-full p-3 rounded bg-black text-white border border-cyan-400"
+        />
+
+        <button
+          type="submit"
+          className="btn-neon w-full mt-4"
+        >
+          Оплатить
+        </button>
+      </form>
+    </div>
+  );
 }
 
-export default function Checkout() {
-  return (
-    <div className="py-12">
-      <h1 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-purple)] bg-clip-text text-transparent">
-        Оплата заказа
-      </h1>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm />
-      </Elements>
-    </div>
-  )
-}
+export default Checkout;
